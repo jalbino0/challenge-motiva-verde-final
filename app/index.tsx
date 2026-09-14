@@ -1,6 +1,16 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AppPopup } from "../src/components/AppPopup";
 import { PrimaryButton } from "../src/components/PrimaryButton";
@@ -73,62 +83,74 @@ export default function EntryScreen() {
 
   return (
     <View style={styles.safe}>
-      <View
-        style={[
-          styles.container,
-          {
-            paddingTop: insets.top + 24,
-            paddingBottom: insets.bottom + 22,
-          },
-        ]}
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.centerArea}>
-          <Image
-            source={require("../assets/logo-simbolo.png")}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>Motiva Verde</Text>
-          <Text style={styles.subtitle}>
-            Acesso exclusivo para funcionários cadastrados
-          </Text>
-        </View>
+        <ScrollView
+          contentContainerStyle={[
+            styles.container,
+            {
+              paddingTop: insets.top + 24,
+              paddingBottom: insets.bottom + 22,
+            },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.centerArea}>
+            <Image
+              source={require("../assets/logo-simbolo.png")}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
 
-        <View style={styles.loginCard}>
-          <Text style={styles.label}>E-mail</Text>
+            <Text style={styles.title}>Motiva Verde</Text>
 
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-            placeholder="seuemail@motiva.com.br"
-            placeholderTextColor={theme.colors.muted}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+            <Text style={styles.subtitle}>
+              Acesso exclusivo para funcionários cadastrados
+            </Text>
+          </View>
 
-          <Text style={[styles.label, styles.passwordLabel]}>Senha</Text>
+          <View style={styles.loginCard}>
+            <Text style={styles.label}>E-mail</Text>
 
-          <TextInput
-            value={senha}
-            onChangeText={setSenha}
-            style={styles.input}
-            placeholder="Digite sua senha"
-            placeholderTextColor={theme.colors.muted}
-            secureTextEntry
-            onSubmitEditing={handleLogin}
-          />
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+              placeholder="seuemail@motiva.com.br"
+              placeholderTextColor={theme.colors.muted}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
+            />
 
-          <PrimaryButton
-            title="Entrar"
-            onPress={handleLogin}
-            variant="primary"
-            loading={submitting}
-            style={styles.button}
-          />
-        </View>
-      </View>
+            <Text style={[styles.label, styles.passwordLabel]}>Senha</Text>
+
+            <TextInput
+              value={senha}
+              onChangeText={setSenha}
+              style={styles.input}
+              placeholder="Digite sua senha"
+              placeholderTextColor={theme.colors.muted}
+              secureTextEntry
+              returnKeyType="done"
+              onSubmitEditing={handleLogin}
+            />
+
+            <PrimaryButton
+              title="Entrar"
+              onPress={handleLogin}
+              variant="primary"
+              loading={submitting}
+              style={styles.button}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <AppPopup
         visible={popup.visible}
@@ -152,10 +174,12 @@ function createStyles(theme: ReturnType<typeof useAppTheme>["theme"]) {
       flex: 1,
       backgroundColor: theme.colors.background,
     },
-    container: {
+    keyboardView: {
       flex: 1,
+    },
+    container: {
+      flexGrow: 1,
       paddingHorizontal: 28,
-      justifyContent: "space-between",
     },
     loading: {
       flex: 1,
@@ -166,7 +190,8 @@ function createStyles(theme: ReturnType<typeof useAppTheme>["theme"]) {
     centerArea: {
       alignItems: "center",
       justifyContent: "center",
-      flex: 1,
+      flexGrow: 1,
+      minHeight: 300,
     },
     logoImage: {
       width: 150,
@@ -191,6 +216,7 @@ function createStyles(theme: ReturnType<typeof useAppTheme>["theme"]) {
       borderWidth: 1,
       borderColor: theme.colors.border,
       padding: 18,
+      marginTop: 24,
       ...theme.shadow,
     },
     label: {

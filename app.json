@@ -12,6 +12,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jalbino.motivaverde",
+      "versionCode": 2,
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -43,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5f2f53bb-0436-452a-afa6-68e17004b964"
+      }
+    },
+    "owner": "motiva-verde-team"
   }
 }
